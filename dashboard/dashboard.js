@@ -3,196 +3,292 @@
 
 const DATA_BASE = "../data/";
 
+// Date when Claude Enterprise access opened to students at large.
+const STUDENT_ACCESS_DATE = "2026-09-15";
+// Earliest date shown on the projects timeline (initial faculty/admin offering).
+const TIMELINE_START = "2026-06-01";
+
 async function loadJSON(name) {
-    const res = await fetch(DATA_BASE + name, { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to load " + name + ": " + res.status);
-    return res.json();
+      const res = await fetch(DATA_BASE + name, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to load " + name + ": " + res.status);
+      return res.json();
+}
+
+async function loadJSONOptional(name) {
+      try { return await loadJSON(name); } catch (e) { return null; }
 }
 
 function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined && text !== null) node.textContent = text;
-    return node;
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined && text !== null) node.textContent = text;
+      return node;
 }
 
 function kpi(label, value) {
-    const box = el("div", "kpi");
-    box.appendChild(el("div", "kpi-value", String(value)));
-    box.appendChild(el("div", "kpi-label", label));
-    return box;
+      const box = el("div", "kpi");
+      box.appendChild(el("div", "kpi-value", String(value)));
+      box.appendChild(el("div", "kpi-label", label));
+      return box;
 }
 
 const PALETTE = [
-  "#800000", "#A4343A", "#DE7C00", "#EAAA00",
+      "#800000", "#A4343A", "#DE7C00", "#EAAA00",
       "#789D4A", "#275D38", "#3EB1C8", "#59315F",
       "#5B6770", "#767676", "#D6636B", "#B05A7A"
-  ];
+    ];
 
 function colors(n) {
-    const out = [];
-    for (let i = 0; i < n; i++) out.push(PALETTE[i % PALETTE.length]);
-    return out;
+      const out = [];
+      for (let i = 0; i < n; i++) out.push(PALETTE[i % PALETTE.length]);
+      return out;
 }
 
-function buildLayout() {
-    const app = document.getElementById("app");
-
-  const header = el("header", "site-header");
-    header.appendChild(el("h1", null, "UChicago Claude Enterprise Adoption Dashboard"));
-    header.appendChild(el("p", "subtitle", "Public projects and plugin/connector adoption across the University of Chicago Claude Enterprise organization."));
-    const snap = el("p", "snapshot", "Snapshot date: ");
-    const snapSpan = el("span"); snapSpan.id = "snapshot-date"; snapSpan.textContent = "-";
-    snap.appendChild(snapSpan);
-    header.appendChild(snap);
-    app.appendChild(header);
-
-  const kpis = el("section", "kpis"); kpis.id = "kpis";
-    app.appendChild(kpis);
-
-  const grid = el("main", "grid");
-    const cards = [
-          ["Projects by Category", "chart-projects-category", "card"],
-          ["Projects by Creator", "chart-projects-creator", "card"],
-          ["Projects Updated Over Time", "chart-projects-time", "card wide"],
-          ["Top Connectors (users, last 30 days)", "chart-top-connectors", "card"],
-          ["Connector Distribution by Category", "chart-connector-distribution", "card"],
-          ["Least Used Connectors (with adoption)", "chart-least-connectors", "card"],
-          ["Zero Adoption Connectors", "zero-adoption", "card"]
-        ];
-    cards.forEach(function (c) {
-          const card = el("section", c[2]);
-          card.appendChild(el("h2", null, c[0]));
-          if (c[1] === "zero-adoption") {
-                  const div = el("div", "tag-list"); div.id = "zero-adoption";
-                  card.appendChild(div);
-          } else {
-                  const canvas = document.createElement("canvas");
-                  canvas.id = c[1];
-                  card.appendChild(canvas);
-          }
-          grid.appendChild(card);
-    });
-    app.appendChild(grid);
-
-  const footer = el("footer", "site-footer");
-    footer.appendChild(el("p", null, "Data collected from the Claude Enterprise web interface (Projects and Plugins). Values are recorded as observed; unknown fields are null. See the repository README for methodology and limitations."));
-    app.appendChild(footer);
-}
-
-function renderKPIs(metrics) {
-    document.getElementById("snapshot-date").textContent = metrics.snapshot_date || "-";
-    const kpis = document.getElementById("kpis");
-    kpis.appendChild(kpi("Public Projects", metrics.total_projects));
-    kpis.appendChild(kpi("Project Creators", metrics.total_creators));
-    kpis.appendChild(kpi("Connectors Tracked", metrics.total_connectors));
-    kpis.appendChild(kpi("Connectors With Adoption", metrics.connectors_with_adoption));
+// Draws a dashed vertical marker at a given category label on the x-axis.
+function verticalMarkerPlugin(labelValue, text) {
+      return {
+              id: "verticalMarker",
+              afterDraw: function (chart) {
+                        const labels = chart.data.labels || [];
+                        const idx = labels.indexOf(labelValue);
+                        if (idx < 0) return;
+                        const x = chart.scales.x.getPixelForValue(idx);
+                        const top = chart.chartArea.top;
+                        const bottom = chart.chartArea.bottom;
+                        const ctx = chart.ctx;
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.setLineDash([6, 4]);
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = "#767676";
+                        ctx.moveTo(x, top);
+                        ctx.lineTo(x, bottom);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        ctx.fillStyle = "#5c0000";
+                        ctx.font = "11px -apple-system, Segoe UI, Roboto, sans-serif";
+                        ctx.textAlign = x > chart.width / 2 ? "right" : "left";
+                        const tx = x > chart.width / 2 ? x - 6 : x + 6;
+                        ctx.fillText(text, tx, top + 12);
+                        ctx.restore();
+              }
+      };
 }
 
 function barChart(id, labels, data, label, horizontal) {
-    new Chart(document.getElementById(id), {
-          type: "bar",
-          data: {
-                  labels: labels,
-                  datasets: [{ label: label, data: data, backgroundColor: colors(labels.length) }]
-          },
-          options: {
-                  indexAxis: horizontal ? "y" : "x",
-                  responsive: true,
-                  plugins: { legend: { display: false } },
-                  scales: { x: { ticks: { autoSkip: false } }, y: { beginAtZero: true } }
-          }
-    });
+      new Chart(document.getElementById(id), {
+              type: "bar",
+              data: {
+                        labels: labels,
+                        datasets: [{ label: label, data: data, backgroundColor: colors(labels.length) }]
+              },
+              options: {
+                        indexAxis: horizontal ? "y" : "x",
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                                    x: { ticks: { autoSkip: false, precision: 0 }, beginAtZero: true },
+                                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+              }
+      });
 }
 
 function doughnutChart(id, labels, data) {
-    new Chart(document.getElementById(id), {
-          type: "doughnut",
-          data: {
-                  labels: labels,
-                  datasets: [{ data: data, backgroundColor: colors(labels.length) }]
-          },
-          options: { responsive: true, plugins: { legend: { position: "right" } } }
-    });
+      new Chart(document.getElementById(id), {
+              type: "doughnut",
+              data: {
+                        labels: labels,
+                        datasets: [{ data: data, backgroundColor: colors(labels.length) }]
+              },
+              options: { responsive: true, plugins: { legend: { position: "right" } } }
+      });
 }
 
-function lineChart(id, labels, data, label) {
-    new Chart(document.getElementById(id), {
-          type: "line",
-          data: {
-                  labels: labels,
-                  datasets: [{ label: label, data: data, borderColor: "#800000", backgroundColor: "rgba(128,0,0,0.15)", fill: true, tension: 0.25 }]
-          },
-          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-    });
+function lineChart(id, labels, data, label, plugins) {
+      new Chart(document.getElementById(id), {
+              type: "line",
+              data: {
+                        labels: labels,
+                        datasets: [{ label: label, data: data, borderColor: "#800000", backgroundColor: "rgba(128,0,0,0.15)", fill: true, tension: 0.25, pointRadius: 2 }]
+              },
+              options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                                    x: { ticks: { autoSkip: true, maxTicksLimit: 12 } },
+                                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+              },
+              plugins: plugins || []
+      });
 }
 
 function countBy(items, key) {
-    const map = {};
-    items.forEach(function (it) {
-          const k = it[key] || "Unknown";
-          map[k] = (map[k] || 0) + 1;
-    });
-    return map;
+      const map = {};
+      items.forEach(function (it) {
+              const k = it[key] || "Unknown";
+              map[k] = (map[k] || 0) + 1;
+      });
+      return map;
 }
 
 function sortedEntries(map) {
-    return Object.keys(map).map(function (k) { return [k, map[k]]; })
-      .sort(function (a, b) { return b[1] - a[1]; });
+      return Object.keys(map).map(function (k) { return [k, map[k]]; })
+        .sort(function (a, b) { return b[1] - a[1]; });
+}
+
+function isoDate(d) {
+      return d.toISOString().slice(0, 10);
+}
+
+// Builds a continuous list of daily dates from start to end (inclusive).
+function dateRange(start, end) {
+      const out = [];
+      const d = new Date(start + "T00:00:00Z");
+      const last = new Date(end + "T00:00:00Z");
+      while (d <= last) { out.push(isoDate(d)); d.setUTCDate(d.getUTCDate() + 1); }
+      return out;
 }
 
 async function main() {
-    buildLayout();
-    try {
-          const [metrics, projects, connectors] = await Promise.all([
-                  loadJSON("metrics.json"),
-                  loadJSON("projects.json"),
-                  loadJSON("connectors.json")
-                ]);
+      buildLayout();
+      try {
+              const [metrics, projects, connectors, pageViews] = await Promise.all([
+                        loadJSON("metrics.json"),
+                        loadJSON("projects.json"),
+                        loadJSON("connectors.json"),
+                        loadJSONOptional("page_views.json")
+                      ]);
 
-      renderKPIs(metrics);
+        renderKPIs(metrics);
 
-      // Projects by category
-      const catEntries = sortedEntries(metrics.projects_by_category);
-          barChart("chart-projects-category", catEntries.map(function (e) { return e[0]; }), catEntries.map(function (e) { return e[1]; }), "Projects", true);
+        // Projects by category
+        const catEntries = sortedEntries(metrics.projects_by_category);
+              barChart("chart-projects-category", catEntries.map(function (e) { return e[0]; }), catEntries.map(function (e) { return e[1]; }), "Projects", true);
 
-      // Projects by creator
-      const creatorEntries = sortedEntries(metrics.projects_by_creator);
-          barChart("chart-projects-creator", creatorEntries.map(function (e) { return e[0]; }), creatorEntries.map(function (e) { return e[1]; }), "Projects", true);
+        // Projects by creator (anonymized codes)
+        const creatorEntries = sortedEntries(metrics.projects_by_creator);
+              barChart("chart-projects-creator", creatorEntries.map(function (e) { return e[0]; }), creatorEntries.map(function (e) { return e[1]; }), "Projects", true);
 
-      // Projects updated over time (by date)
-      const timeMap = countBy(projects.projects, "updated_date");
-          const timeLabels = Object.keys(timeMap).filter(function (d) { return d && d !== "Unknown"; }).sort();
-          const timeData = timeLabels.map(function (d) { return timeMap[d]; });
-          lineChart("chart-projects-time", timeLabels, timeData, "Projects updated");
+        // Projects updated over time (continuous daily axis from initial offering)
+        const timeMap = countBy(projects.projects, "updated_date");
+              let end = TIMELINE_START;
+              Object.keys(timeMap).forEach(function (k) { if (k !== "Unknown" && k > end) end = k; });
+              const timeLabels = dateRange(TIMELINE_START, end);
+              const timeData = timeLabels.map(function (d) { return timeMap[d] || 0; });
+              lineChart("chart-projects-time", timeLabels, timeData, "Projects updated", [verticalMarkerPlugin(STUDENT_ACCESS_DATE, "Students at large (Sep 15)")]);
 
-      // Top connectors
-      const top = metrics.top_connectors || [];
-          barChart("chart-top-connectors", top.map(function (c) { return c.name; }), top.map(function (c) { return c.user_count; }), "Users", true);
+        // Top connectors
+        const top = metrics.top_connectors;
+              barChart("chart-top-connectors", top.map(function (c) { return c.name; }), top.map(function (c) { return c.user_count; }), "Users", true);
 
-      // Connector distribution by category (adopted connectors only)
-      const adopted = connectors.connectors.filter(function (c) { return c.user_count > 0; });
-          const connCat = {};
-          adopted.forEach(function (c) { connCat[c.category] = (connCat[c.category] || 0) + c.user_count; });
-          const connCatEntries = sortedEntries(connCat);
-          doughnutChart("chart-connector-distribution", connCatEntries.map(function (e) { return e[0]; }), connCatEntries.map(function (e) { return e[1]; }));
+        // Connector distribution by category (adopted connectors only)
+        const adopted = connectors.connectors.filter(function (c) { return c.user_count; });
+              const connCat = {};
+              adopted.forEach(function (c) { connCat[c.category] = (connCat[c.category] || 0) + c.user_count; });
+              const connCatEntries = sortedEntries(connCat);
+              doughnutChart("chart-connector-distribution", connCatEntries.map(function (e) { return e[0]; }), connCatEntries.map(function (e) { return e[1]; }));
 
-      // Least used connectors with adoption (bottom of adopted list)
-      const least = (metrics.least_used_connectors || []).concat(top.slice().reverse().slice(0, 4));
-          const leastMap = {};
-          adopted.forEach(function (c) { leastMap[c.connector_name] = c.user_count; });
-          const leastSorted = sortedEntries(leastMap).slice().reverse().slice(0, 5);
-          barChart("chart-least-connectors", leastSorted.map(function (e) { return e[0]; }), leastSorted.map(function (e) { return e[1]; }), "Users", true);
+        // Least used connectors with adoption
+        const leastMap = {};
+              adopted.forEach(function (c) { leastMap[c.connector_name] = c.user_count; });
+              const leastSorted = sortedEntries(leastMap).slice().reverse().slice(0, 6);
+              barChart("chart-least-connectors", leastSorted.map(function (e) { return e[0]; }), leastSorted.map(function (e) { return e[1]; }), "Users", true);
 
-      // Zero adoption connectors
-      const zero = metrics.zero_adoption_connectors || [];
-          const zeroBox = document.getElementById("zero-adoption");
-          zero.forEach(function (name) { zeroBox.appendChild(el("span", "tag", name)); });
-    } catch (err) {
-          const app = document.getElementById("app");
-          app.appendChild(el("p", "error", "Error loading data: " + err.message));
-          console.error(err);
-    }
+        // Zero adoption connectors
+        const zero = metrics.zero_adoption_connectors;
+              const zeroBox = document.getElementById("zero-adoption");
+              zero.forEach(function (name) { zeroBox.appendChild(el("span", "tag", name)); });
+
+        // Page views (ServiceNow KB articles)
+        renderPageViews(pageViews);
+      } catch (err) {
+              const app = document.getElementById("app");
+              app.appendChild(el("p", "error", "Error loading data: " + err.message));
+              console.error(err);
+      }
+}
+
+function renderPageViews(pageViews) {
+      const card = document.getElementById("page-views-card");
+      if (!pageViews || !pageViews.articles) { if (card) card.style.display = "none"; return; }
+      const labels = pageViews.articles.map(function (a) { return a.article_number; });
+      const latest = pageViews.articles.map(function (a) {
+              const h = a.history || [];
+              return h.length ? h[h.length - 1].views : 0;
+      });
+      barChart("chart-page-views", labels, latest, "Views", true);
+      const list = document.getElementById("page-views-legend");
+      pageViews.articles.forEach(function (a) {
+              const h = a.history || [];
+              const v = h.length ? h[h.length - 1].views : 0;
+              list.appendChild(el("li", null, a.article_number + " — " + a.title + ": " + v.toLocaleString() + " views"));
+      });
+}
+
+function renderKPIs(metrics) {
+      document.getElementById("snapshot-date").textContent = metrics.snapshot_date || "-";
+      const kpis = document.getElementById("kpis");
+      kpis.appendChild(kpi("Public Projects", metrics.total_projects));
+      kpis.appendChild(kpi("Project Creators", metrics.total_creators));
+      kpis.appendChild(kpi("Connectors Tracked", metrics.total_connectors));
+      kpis.appendChild(kpi("Connectors With Adoption", metrics.connectors_with_adoption));
+}
+
+function buildLayout() {
+      const app = document.getElementById("app");
+
+  const header = el("header", "site-header");
+      header.appendChild(el("h1", null, "UChicago Claude Enterprise Adoption Dashboard"));
+      header.appendChild(el("p", "subtitle", "Public projects and plugin/connector adoption across the University of Chicago Claude Enterprise organization."));
+      const snap = el("p", "snapshot", "Snapshot date: ");
+      const snapSpan = el("span"); snapSpan.id = "snapshot-date"; snapSpan.textContent = "-";
+      snap.appendChild(snapSpan);
+      header.appendChild(snap);
+      app.appendChild(header);
+
+  const kpis = el("section", "kpis"); kpis.id = "kpis";
+      app.appendChild(kpis);
+
+  const grid = el("main", "grid");
+      const cards = [
+              ["Projects by Category", "chart-projects-category", "card"],
+              ["Projects by Creator", "chart-projects-creator", "card"],
+              ["Projects Updated Over Time", "chart-projects-time", "card wide"],
+              ["Top Connectors (users, last 30 days)", "chart-top-connectors", "card"],
+              ["Connector Distribution by Category", "chart-connector-distribution", "card"],
+              ["Least Used Connectors (with adoption)", "chart-least-connectors", "card"],
+              ["Zero Adoption Connectors", "zero-adoption", "card"]
+            ];
+      cards.forEach(function (c) {
+              const card = el("section", c[2]);
+              card.appendChild(el("h2", null, c[0]));
+              if (c[1] === "zero-adoption") {
+                        const div = el("div", "tag-list"); div.id = "zero-adoption";
+                        card.appendChild(div);
+              } else {
+                        const canvas = document.createElement("canvas");
+                        canvas.id = c[1];
+                        card.appendChild(canvas);
+              }
+              grid.appendChild(card);
+      });
+
+  // Page views card
+  const pv = el("section", "card wide"); pv.id = "page-views-card";
+      pv.appendChild(el("h2", null, "ServiceNow KB Page Views (cumulative)"));
+      const pvCanvas = document.createElement("canvas"); pvCanvas.id = "chart-page-views";
+      pv.appendChild(pvCanvas);
+      const pvList = el("ul", "pv-legend"); pvList.id = "page-views-legend";
+      pv.appendChild(pvList);
+      grid.appendChild(pv);
+
+  app.appendChild(grid);
+
+  const footer = el("footer", "site-footer");
+      footer.appendChild(el("p", null, "Data collected from the Claude Enterprise web interface (Projects and Plugins) and the UChicago ServiceNow knowledge base (page views). Creator identities are anonymized. Values are recorded as observed; unknown fields are null."));
+      app.appendChild(footer);
 }
 
 document.addEventListener("DOMContentLoaded", main);
