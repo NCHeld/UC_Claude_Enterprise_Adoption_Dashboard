@@ -1,0 +1,177 @@
+name: Daily Dashboard Refresh
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Timezone / DST strategy
+#
+# Chicago (America/Chicago) is UTC-5 in summer (CDT, Mar→Nov) and UTC-6 in
+# winter (CST, Nov→Mar). Cron cannot follow DST, so we schedule two firings:
+#   11:30 UTC → 06:30 CDT  (active Mar–Nov)
+#   12:30 UTC → 06:30 CST  (active Nov–Mar)
+# Both fire year-round; a guard step (below) checks the actual Chicago hour
+# and exits immediately if it's outside the 06:xx window. During the
+# transition weekend one trigger always fires at the wrong time and the guard
+# discards it in seconds — no double-run, no missed run.
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  schedule:
+    - cron: '30 11 * * *'   # 06:30 CDT (UTC-5, Mar–Nov)
+    - cron: '30 12 * * *'   # 06:30 CST (UTC-6, Nov–Mar)
+  workflow_dispatch:
+    inputs:
+      skip_time_guard:
+        description: 'Skip timezone guard (for manual test runs)'
+        type: boolean
+        default: false
+
+# Prevent overlapping runs. cancel-in-progress: false ensures a running
+# collection is never interrupted mid-write.
+concurrency:
+  group: dashboard-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write       # commit + push data files
+  pull-requests: write  # open the AI narrative PR
+
+jobs:
+  refresh:
+    name: Collect → Recalculate → Snapshot → Narrate
+    # ────────────────────────────────────────────────────────────────────────
+    # Self-hosted runner on your Mac. Register the runner under
+    # Settings → Actions → Runners with the label "macos-home".
+    # See docs/runner-setup.md for the full setup guide.
+    # ────────────────────────────────────────────────────────────────────────
+    runs-on: [self-hosted, macos-home]
+
+    env:
+      TZ: America/Chicago   # all date() calls in scripts use this
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CDP_URL: ${{ vars.CDP_URL || 'http://localhost:9222' }}
+      CLAUDE_ENTERPRISE_URL: ${{ vars.CLAUDE_ENTERPRISE_URL || 'https://claude.ai' }}
+      SERVICENOW_BASE_URL: ${{ vars.SERVICENOW_BASE_URL || 'https://uchicago.service-now.com' }}
+
+    steps:
+      # ── 1. Timezone guard ─────────────────────────────────────────────────
+      - name: Timezone guard (discard the wrong-offset cron firing)
+        id: guard
+        if: github.event_name == 'schedule'
+        run: |
+          HOUR=$(TZ=America/Chicago date +%H)
+          echo "Chicago hour: $HOUR"
+          if [ "$HOUR" -lt 6 ] || [ "$HOUR" -ge 7 ]; then
+            echo "Outside 06:xx window — this is the off-season cron firing; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── 2. Checkout ───────────────────────────────────────────────────────
+      - name: Checkout repository
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── 3. Node.js + dependencies ─────────────────────────────────────────
+      - name: Set up Node.js 20
+        if: steps.guard.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install script dependencies
+        if: steps.guard.outputs.skip != 'true'
+        working-directory: scripts
+        run: npm ci
+
+      # ── 4. Data collection ────────────────────────────────────────────────
+      - name: Collect data from Claude Enterprise and ServiceNow
+        if: steps.guard.outputs.skip != 'true'
+        working-directory: scripts
+        run: node collect.js
+
+      # ── 5. Deterministic recalculation ────────────────────────────────────
+      - name: Rebuild metrics.json
+        if: steps.guard.outputs.skip != 'true'
+        working-directory: scripts
+        run: node recalculate.js
+
+      - name: Append history snapshot
+        if: steps.guard.outputs.skip != 'true'
+        working-directory: scripts
+        run: node snapshot.js
+
+      # ── 6. Commit data changes to main ────────────────────────────────────
+      - name: Commit and push updated data files
+        if: steps.guard.outputs.skip != 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          DATE=$(TZ=America/Chicago date +%Y-%m-%d)
+          git add \
+            data/projects.json \
+            data/projects.csv \
+            data/connectors.json \
+            data/connectors.csv \
+            data/metrics.json \
+            data/history.json \
+            data/page_views.json
+          if git diff --cached --quiet; then
+            echo "No data changes — nothing to commit."
+          else
+            git commit -m "Refresh datasets and append snapshot ${DATE}"
+            git push -u origin HEAD:main
+            echo "Pushed data refresh for ${DATE}."
+          fi
+
+      # ── 7. AI narrative (opens a PR; skips if < 2 snapshots) ─────────────
+      - name: Check snapshot count for narrative gating
+        if: steps.guard.outputs.skip != 'true'
+        id: snap_count
+        run: |
+          COUNT=$(node -e "const h=require('./data/history.json');console.log(h.snapshots.length)")
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Snapshot count: $COUNT"
+
+      - name: Generate AI trend narrative
+        if: steps.guard.outputs.skip != 'true' && fromJSON(steps.snap_count.outputs.count) >= 2
+        working-directory: scripts
+        run: node generate-narrative.js
+
+      - name: Open PR for narrative review
+        if: steps.guard.outputs.skip != 'true' && fromJSON(steps.snap_count.outputs.count) >= 2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(TZ=America/Chicago date +%Y-%m-%d)
+          BRANCH="narrative/${DATE}"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/narrative.md
+          if git diff --cached --quiet; then
+            echo "Narrative unchanged — no PR needed."
+          else
+            git commit -m "AI trend narrative for ${DATE}"
+            git push -u origin "$BRANCH"
+            printf '%s\n' \
+              "## Auto-generated trend narrative — review before merging" \
+              "" \
+              "This PR contains an AI-generated summary of adoption trends for ${DATE}." \
+              "" \
+              "Before merging:" \
+              "- [ ] Read data/narrative.md and verify all numbers match the data files." \
+              "- [ ] Check that the tone is cautious and non-causal throughout." \
+              "- [ ] Remove or reword any statement that overstates certainty." \
+              "" \
+              "Language model outputs may contain errors. This narrative is a draft." \
+              > /tmp/pr-body.txt
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "AI Trend Narrative: ${DATE}" \
+              --body-file /tmp/pr-body.txt
+            echo "PR opened for narrative/${DATE}."
+          fi
