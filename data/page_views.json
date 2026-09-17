@@ -1,0 +1,22 @@
+{
+  "description": "Page-view tracking for UChicago ServiceNow Claude Enterprise knowledge-base articles. View counts are read from the article header ('N Views') on each snapshot date. Append a new entry per article each time views are collected; never overwrite prior entries.",
+  "source": "UChicago Services Portal (uchicago.service-now.com) - IT Services Knowledge",
+  "articles": [
+    {
+      "article_number": "KB06004829",
+      "title": "Request Access to Claude Enterprise",
+      "url": "https://uchicago.service-now.com/services?id=kb_article&sys_id=3c567a8a471f07905317f122736d43d0",
+      "history": [
+        {"date": "2026-09-17", "views": 21500}
+      ]
+    },
+    {
+      "article_number": "KB06004835",
+      "title": "Download Claude Enterprise at UChicago",
+      "url": "https://uchicago.service-now.com/services?id=kb_article&sysparm_article=KB06004835",
+      "history": [
+        {"date": "2026-09-17", "views": 1043}
+      ]
+    }
+  ]
+}
