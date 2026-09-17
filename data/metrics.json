@@ -1,0 +1,68 @@
+{
+  "snapshot_date": "2026-09-17",
+  "total_projects": 30,
+  "total_creators": 24,
+  "projects_by_category": {
+    "Research": 12,
+    "Teaching": 6,
+    "Administrative Operations": 4,
+    "Human Resources": 2,
+    "Career Development": 1,
+    "Legal / Compliance": 1,
+    "Student Support": 1,
+    "IT / Engineering": 1,
+    "General Productivity": 1,
+    "Other": 1
+  },
+  "projects_by_creator": {
+    "Gabriele Berruto": 4,
+    "Joe Olivier": 2,
+    "Syrita Butler": 2,
+    "Elizabeth Walls": 2,
+    "Nathan Held": 1,
+    "Haojie Tao": 1,
+    "Si Qin": 1,
+    "Supuni Indrachapa Hewa Inaththappulige": 1,
+    "Jeremy Berg": 1,
+    "Enrico Drigo": 1,
+    "Lori Lont": 1,
+    "Stephen Turoscy": 1,
+    "William Colegrove": 1,
+    "Shelby Mahaffie": 1,
+    "Wenyan Xu": 1,
+    "Minhao Zhang": 1,
+    "Samhitha Sriraman": 1,
+    "Benjamin Lessing": 1,
+    "Kevin Doherty": 1,
+    "Ashwini Naik": 1,
+    "Matthew Bonges": 1,
+    "Thomas Keith": 1,
+    "Keith Purvis": 1,
+    "David DeWitt": 1
+  },
+  "total_connectors": 40,
+  "connectors_with_adoption": 11,
+  "top_connectors": [
+    {"name": "canvas-design", "user_count": 7, "rank": 1},
+    {"name": "learn", "user_count": 7, "rank": 2},
+    {"name": "doc-coauthoring", "user_count": 4, "rank": 3},
+    {"name": "Plugin Management", "user_count": 3, "rank": 4},
+    {"name": "Data", "user_count": 3, "rank": 5},
+    {"name": "Engineering", "user_count": 3, "rank": 6},
+    {"name": "Legal", "user_count": 3, "rank": 7},
+    {"name": "Human Resources", "user_count": 2, "rank": 8},
+    {"name": "Bio Research", "user_count": 2, "rank": 9},
+    {"name": "Tavily", "user_count": 2, "rank": 10}
+  ],
+  "least_used_connectors": [
+    {"name": "internal-comms", "user_count": 2, "rank": 11}
+  ],
+  "zero_adoption_connectors": [
+    "Postiz", "Finance", "Product Management", "PDF Viewer", "Sales", "Operations", "Small Business", "Customer Support", "Brand Voice", "Slack", "Adobe for Creativity", "SearchFit SEO", "Canva", "Apollo.io", "Desktop Commander", "Zoom", "Bright Data", "Common Room", "S&P Global", "Miro", "Zapier", "Box", "ZoomInfo", "Airtable", "Dropbox", "monday.com", "Exa", "Learn with Coursera", "Vanta"
+  ],
+  "notes": {
+    "connector_scope": "total_connectors reflects the 40 plugins recorded in connectors.json; the Discover catalog contains 90+ available plugins, but only 11 had measurable organization adoption in the last 30 days.",
+    "least_used_definition": "Among connectors WITH adoption, internal-comms (rank 11, 2 users) is the least used. Connectors with zero users are listed separately in zero_adoption_connectors.",
+    "data_integrity": "No values are fabricated; user counts come directly from the Plugins Discover 'Most used' view."
+  }
+}
