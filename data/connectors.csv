@@ -1,0 +1,41 @@
+connector_name,provider,description,user_count,category,rank,collection_date
+"canvas-design","Anthropic","Create beautiful visual art in .png and .pdf documents using design philosophy.",7,"Design",1,2026-09-17
+"learn","Anthropic","Skill for intellectual understanding - learning how or why something works.",7,"Education",2,2026-09-17
+"doc-coauthoring","Anthropic","Structured workflow for co-authoring documentation.",4,"Productivity",3,2026-09-17
+"Plugin Management","Anthropic","Create, customize, and manage plugins tailored to your organization.",3,"Engineering",4,2026-09-17
+"Data","Anthropic","Write SQL, explore datasets, and build visualizations and dashboards.",3,"Data",5,2026-09-17
+"Engineering","Anthropic","Streamline engineering workflows - standups, code review, incident response.",3,"Engineering",6,2026-09-17
+"Legal","Anthropic","Speed up contract review, NDA triage, and compliance workflows.",3,"Legal",7,2026-09-17
+"Human Resources","Anthropic","Streamline people operations - recruiting, onboarding, performance reviews.",2,"HR",8,2026-09-17
+"Bio Research","Anthropic","Connect to preclinical research tools and databases.",2,"Healthcare & life sciences",9,2026-09-17
+"Tavily","Tavily Team","Real-time web data via search, extract, crawl, and research APIs.",2,"Engineering",10,2026-09-17
+"internal-comms","Anthropic","Resources to help write internal communications.",2,"Communications",11,2026-09-17
+"Postiz","Nevo David","Social media automation CLI for scheduling posts.",0,"Marketing",12,2026-09-17
+"Finance","Anthropic","Streamline finance and accounting workflows.",0,"Finance",13,2026-09-17
+"Product Management","Anthropic","Write feature specs, plan roadmaps, synthesize user research.",0,"Product",14,2026-09-17
+"PDF Viewer","Anthropic","View, annotate, and sign PDFs in a live interactive viewer.",0,"Legal",15,2026-09-17
+"Sales","Anthropic","Prep calls, follow up, research accounts, and review deals.",0,"Sales",16,2026-09-17
+"Operations","Anthropic","Optimize business operations - vendor and process management.",0,"Operations",17,2026-09-17
+"Small Business","Anthropic","Pre-built small business workflows.",0,"Operations",18,2026-09-17
+"Customer Support","Anthropic","Triage tickets, draft responses, and build a knowledge base.",0,"Customer support",19,2026-09-17
+"Brand Voice","Tribe AI","Discover brand voice and generate enforceable guidelines.",0,"Marketing",20,2026-09-17
+"Slack","Salesforce","Slack integration for searching messages and sending communications.",0,"Email & messages",21,2026-09-17
+"Adobe for Creativity","Adobe","Adobe Creative Cloud tools for images, vectors, design, and video.",0,"Design",22,2026-09-17
+"SearchFit SEO","SearchFit.ai","AI-powered SEO toolkit - audit, plan, and optimize.",0,"Marketing",23,2026-09-17
+"Canva","Canva","Create, edit, and brand-check Canva designs via MCP.",0,"Design",24,2026-09-17
+"Apollo.io","Apollo.io","Prospect, enrich leads, and load outreach sequences.",0,"Sales",25,2026-09-17
+"Desktop Commander","Desktop Commander","MCP server for terminal commands and file operations.",0,"Engineering",26,2026-09-17
+"Zoom","Zoom","Build and debug Zoom integrations across APIs and SDKs.",0,"Engineering",27,2026-09-17
+"Bright Data","Bright Data","Web scraping, search, and structured data extraction via MCP.",0,"Data",28,2026-09-17
+"Common Room","Common Room","GTM copilot - research accounts and prep for calls.",0,"Sales",29,2026-09-17
+"S&P Global","Kensho Technologies","Financial data and analytics skills.",0,"Finance",30,2026-09-17
+"Miro","Miro","Access Miro boards; create diagrams and generate code.",0,"Design",31,2026-09-17
+"Zapier","Zapier","Connect 8,000+ apps via Zapier actions.",0,"APIs",32,2026-09-17
+"Box","Box","Work with Box content - search files and organize folders.",0,"Legal",33,2026-09-17
+"ZoomInfo","ZoomInfo","Search companies and contacts, enrich leads.",0,"Sales",34,2026-09-17
+"Airtable","Airtable","Database and operations layer for agents.",0,"Operations",35,2026-09-17
+"Dropbox","Dropbox","Connect Dropbox files to Claude.",0,"Files & documents",36,2026-09-17
+"monday.com","monday.com","Manage boards, items, docs, and forms.",0,"Operations",37,2026-09-17
+"Exa","Exa","AI web search, deep research, and content extraction.",0,"Data",38,2026-09-17
+"Learn with Coursera","Coursera","Personalized Coursera learning experiences.",0,"Education",39,2026-09-17
+"Vanta","Vanta","Connect Claude to Vanta's security and compliance platform.",0,"IT & security",40,2026-09-17
