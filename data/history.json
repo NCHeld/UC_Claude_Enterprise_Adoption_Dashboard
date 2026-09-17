@@ -1,0 +1,35 @@
+{
+  "snapshots": [
+    {
+      "date": "2026-09-17",
+      "project_count": 30,
+      "connector_count": 40,
+      "connectors_with_adoption": 11,
+      "projects_by_category": {
+        "Research": 12,
+        "Teaching": 6,
+        "Administrative Operations": 4,
+        "Human Resources": 2,
+        "Career Development": 1,
+        "Legal / Compliance": 1,
+        "Student Support": 1,
+        "IT / Engineering": 1,
+        "General Productivity": 1,
+        "Other": 1
+      },
+      "connector_usage": {
+        "canvas-design": 7,
+        "learn": 7,
+        "doc-coauthoring": 4,
+        "Plugin Management": 3,
+        "Data": 3,
+        "Engineering": 3,
+        "Legal": 3,
+        "Human Resources": 2,
+        "Bio Research": 2,
+        "Tavily": 2,
+        "internal-comms": 2
+      }
+    }
+  ]
+}
