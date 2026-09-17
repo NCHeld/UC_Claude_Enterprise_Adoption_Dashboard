@@ -50,7 +50,6 @@ jobs:
       # if your instance URL or CDP port differs from the defaults.
       CDP_URL: ${{ vars.CDP_URL || 'http://localhost:9222' }}
       CLAUDE_ENTERPRISE_URL: ${{ vars.CLAUDE_ENTERPRISE_URL || 'https://claude.ai' }}
-      SERVICENOW_BASE_URL: ${{ vars.SERVICENOW_BASE_URL || 'https://uchicago.service-now.com' }}
 
     steps:
       # ── 1. Timezone guard ─────────────────────────────────────────────────

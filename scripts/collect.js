@@ -12,7 +12,9 @@
  * Environment variables (set in workflow or .env):
  *   CDP_URL               — Chrome DevTools endpoint, default http://localhost:9222
  *   CLAUDE_ENTERPRISE_URL — Base URL of your Claude Enterprise instance, default https://claude.ai
- *   SERVICENOW_BASE_URL   — ServiceNow portal base URL, default https://uchicago.service-now.com
+ *
+ * ServiceNow article URLs are read in full from data/page_views.json, so no
+ * ServiceNow base URL is needed here.
  */
 
 'use strict';
@@ -23,7 +25,6 @@ const path = require('path');
 
 const CDP_URL = process.env.CDP_URL || 'http://localhost:9222';
 const CLAUDE_URL = (process.env.CLAUDE_ENTERPRISE_URL || 'https://claude.ai').replace(/\/$/, '');
-const SN_BASE = (process.env.SERVICENOW_BASE_URL || 'https://uchicago.service-now.com').replace(/\/$/, '');
 const DATA_DIR = path.join(__dirname, '..', 'data');
 
 // ---------------------------------------------------------------------------

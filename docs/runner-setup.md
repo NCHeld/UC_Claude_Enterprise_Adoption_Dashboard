@@ -19,8 +19,9 @@ This guide walks through turning your MacBook Pro into a self-hosted GitHub Acti
 1. Go to **Settings → Actions → Runners → New self-hosted runner** on this repository.
 2. Select **macOS** as the OS.
 3. Follow the on-screen commands to download and configure the runner agent.
-   When prompted for labels, enter: **`self-hosted,macos-home`**
-   (the workflow targets exactly these labels).
+   When prompted for additional labels, enter just: **`macos-home`**
+   GitHub applies `self-hosted`, `macOS`, and the architecture label automatically,
+   so the workflow's `runs-on: [self-hosted, macos-home]` will match.
 4. Start the runner. For headless/always-on operation, install it as a service:
    ```bash
    cd ~/actions-runner
@@ -96,7 +97,8 @@ Override these only if your setup differs from the defaults:
 |-------------------------|-------------------------------------|
 | `CDP_URL`               | `http://localhost:9222`             |
 | `CLAUDE_ENTERPRISE_URL` | `https://claude.ai`                 |
-| `SERVICENOW_BASE_URL`   | `https://uchicago.service-now.com`  |
+
+ServiceNow article URLs are stored in full inside `data/page_views.json`, so there is no ServiceNow base-URL setting.
 
 ---
 
