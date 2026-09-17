@@ -3,40 +3,39 @@
   "total_projects": 66,
   "total_creators": 51,
   "projects_by_category": {
-    "Research": 22,
     "Administrative Operations": 10,
-    "IT / Engineering": 7,
     "Teaching": 6,
-    "General Productivity": 6,
-    "Other": 5,
+    "Research": 22,
     "Career Development": 4,
     "Human Resources": 2,
-    "Student Support": 2,
     "Legal / Compliance": 1,
+    "Other": 5,
+    "IT / Engineering": 7,
+    "Student Support": 2,
+    "General Productivity": 6,
     "Finance": 1
   },
   "projects_by_creator": {
-    "GEBO": 8,
-    "SNTY": 3,
-    "KYME": 2,
-    "SABR": 2,
-    "JEOR": 2,
-    "EHWS": 2,
-    "AINK": 2,
-    "SASN": 2,
     "NNHD": 1,
     "HETO": 1,
     "SIQN": 1,
     "SIIE": 1,
+    "EHWS": 2,
+    "GEBO": 8,
     "JYBG": 1,
     "EODO": 1,
     "LILT": 1,
+    "SABR": 2,
+    "JEOR": 2,
+    "SNTY": 3,
     "WMCE": 1,
     "SYME": 1,
     "WNXU": 1,
     "MOZG": 1,
+    "SASN": 2,
     "BNLG": 1,
     "KNDY": 1,
+    "AINK": 2,
     "MWBS": 1,
     "TSKH": 1,
     "KHPS": 1,
@@ -45,6 +44,7 @@
     "YNLU": 1,
     "DDWR": 1,
     "HEKY": 1,
+    "KYME": 2,
     "TYDG": 1,
     "EOCN": 1,
     "INGL": 1,
@@ -71,22 +71,94 @@
   "total_connectors": 40,
   "connectors_with_adoption": 11,
   "top_connectors": [
-    {"name": "canvas-design", "user_count": 7, "rank": 1},
-    {"name": "learn", "user_count": 7, "rank": 2},
-    {"name": "doc-coauthoring", "user_count": 4, "rank": 3},
-    {"name": "Plugin Management", "user_count": 3, "rank": 4},
-    {"name": "Data", "user_count": 3, "rank": 5},
-    {"name": "Engineering", "user_count": 3, "rank": 6},
-    {"name": "Legal", "user_count": 3, "rank": 7},
-    {"name": "Human Resources", "user_count": 2, "rank": 8},
-    {"name": "Bio Research", "user_count": 2, "rank": 9},
-    {"name": "Tavily", "user_count": 2, "rank": 10}
+    {
+      "name": "canvas-design",
+      "user_count": 7,
+      "rank": 1
+    },
+    {
+      "name": "learn",
+      "user_count": 7,
+      "rank": 2
+    },
+    {
+      "name": "doc-coauthoring",
+      "user_count": 4,
+      "rank": 3
+    },
+    {
+      "name": "Plugin Management",
+      "user_count": 3,
+      "rank": 4
+    },
+    {
+      "name": "Data",
+      "user_count": 3,
+      "rank": 5
+    },
+    {
+      "name": "Engineering",
+      "user_count": 3,
+      "rank": 6
+    },
+    {
+      "name": "Legal",
+      "user_count": 3,
+      "rank": 7
+    },
+    {
+      "name": "Human Resources",
+      "user_count": 2,
+      "rank": 8
+    },
+    {
+      "name": "Bio Research",
+      "user_count": 2,
+      "rank": 9
+    },
+    {
+      "name": "Tavily",
+      "user_count": 2,
+      "rank": 10
+    }
   ],
   "least_used_connectors": [
-    {"name": "internal-comms", "user_count": 2, "rank": 11}
+    {
+      "name": "internal-comms",
+      "user_count": 2,
+      "rank": 11
+    }
   ],
   "zero_adoption_connectors": [
-    "Postiz", "Finance", "Product Management", "PDF Viewer", "Sales", "Operations", "Small Business", "Customer Support", "Brand Voice", "Slack", "Adobe for Creativity", "SearchFit SEO", "Canva", "Apollo.io", "Desktop Commander", "Zoom", "Bright Data", "Common Room", "S&P Global", "Miro", "Zapier", "Box", "ZoomInfo", "Airtable", "Dropbox", "monday.com", "Exa", "Learn with Coursera", "Vanta"
+    "Postiz",
+    "Finance",
+    "Product Management",
+    "PDF Viewer",
+    "Sales",
+    "Operations",
+    "Small Business",
+    "Customer Support",
+    "Brand Voice",
+    "Slack",
+    "Adobe for Creativity",
+    "SearchFit SEO",
+    "Canva",
+    "Apollo.io",
+    "Desktop Commander",
+    "Zoom",
+    "Bright Data",
+    "Common Room",
+    "S&P Global",
+    "Miro",
+    "Zapier",
+    "Box",
+    "ZoomInfo",
+    "Airtable",
+    "Dropbox",
+    "monday.com",
+    "Exa",
+    "Learn with Coursera",
+    "Vanta"
   ],
   "notes": {
     "connector_scope": "total_connectors reflects the 40 plugins recorded in connectors.json; the Discover catalog contains 90+ available plugins, but only 11 had measurable organization adoption in the last 30 days.",
