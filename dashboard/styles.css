@@ -122,3 +122,15 @@ body {
     padding: 24px;
     font-weight: 600;
 }
+
+
+.pv-legend {
+    margin: 14px 0 0 0;
+    padding-left: 18px;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.pv-legend li {
+    margin: 2px 0;
+}
