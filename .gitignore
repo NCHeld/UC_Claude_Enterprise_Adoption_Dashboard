@@ -1,1 +1,4 @@
 scripts/node_modules/
+private/
+data/projects.json
+data/projects.csv
