@@ -1,12 +1,12 @@
 # UChicago Claude Enterprise Adoption: Baseline Narrative (through September 15, 2026)
 
-*This narrative covers the period from the initial faculty/staff rollout through September 14, 2026 — the day before student access opened broadly. All figures are sourced from the dashboard data files; no values are fabricated. Because this dashboard tracks only publicly shared projects and plugin/connector usage visible in the organizational interface, it represents a deliberate-visibility subset of total activity.*
+*This narrative covers the period from the initial faculty/staff rollout through September 14, 2026 — the day before student access opened broadly. All figures are sourced from the dashboard data files; no values are fabricated. Because this dashboard tracks only publicly shared projects and plugin/connector usage visible in the organizational interface, it represents a deliberate-visibility subset of total activity. Per-project and per-creator detail (project titles, descriptions, and creators) is kept private (UChicago-only); only aggregate project figures are published here.*
 
 ---
 
 ## Early Adoption: A Faculty and Staff Foundation
 
-From the initial rollout through mid-September 2026, Claude Enterprise adoption at the University of Chicago was concentrated among faculty, staff, and select administrators. The September 17 snapshot — taken two days after students gained access — captures a baseline shaped almost entirely by this earlier cohort. Sixty-six publicly shared projects were observed across 51 distinct creators, with Research (22 projects) and Administrative Operations (10 projects) as the leading categories. The distribution suggests that early adopters were disproportionately researchers and administrative professionals exploring AI-assisted workflows, which aligns with typical faculty-first enterprise rollout patterns at research universities.
+From the initial rollout through mid-September 2026, Claude Enterprise adoption at the University of Chicago was concentrated among faculty, staff, and select administrators. The September 17 snapshot — taken two days after students gained access — captures a baseline shaped almost entirely by this earlier cohort. Sixty-six publicly shared projects were observed, with Research (22 projects) and Administrative Operations (10 projects) as the leading categories. Only aggregate, category-level figures are published; per-creator detail is kept private. The distribution suggests that early adopters were disproportionately researchers and administrative professionals exploring AI-assisted workflows, which aligns with typical faculty-first enterprise rollout patterns at research universities.
 
 ## Connector Adoption: Deliberate and Narrow
 
@@ -26,4 +26,4 @@ The opening of student access on September 15, 2026 represents the most signific
 
 ---
 
-*Data source: Claude Enterprise organizational interface (projects and plugins) and UChicago ServiceNow knowledge base (page views). Creator identities are anonymized. Last updated: 2026-09-17.*
+*Data source: Claude Enterprise organizational interface (projects and plugins) and UChicago ServiceNow knowledge base (page views). Per-project and per-creator detail is kept private (UChicago-only); only aggregate project figures are published. Last updated: 2026-09-17.*
