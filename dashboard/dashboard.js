@@ -1,4 +1,4 @@
-/ UChicago Claude Enterprise Adoption Dashboard
+// UChicago Claude Enterprise Adoption Dashboard
 // Loads collected datasets and renders visualizations with Chart.js.
 
 const DATA_BASE = "../data/";
