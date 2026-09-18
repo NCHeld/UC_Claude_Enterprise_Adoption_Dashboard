@@ -1,7 +1,6 @@
 {
   "snapshot_date": "2026-09-17",
   "total_projects": 66,
-  "total_creators": 51,
   "projects_by_category": {
     "Administrative Operations": 10,
     "Teaching": 6,
@@ -15,155 +14,30 @@
     "General Productivity": 6,
     "Finance": 1
   },
-  "projects_by_creator": {
-    "NNHD": 1,
-    "HETO": 1,
-    "SIQN": 1,
-    "SIIE": 1,
-    "EHWS": 2,
-    "GEBO": 8,
-    "JYBG": 1,
-    "EODO": 1,
-    "LILT": 1,
-    "SABR": 2,
-    "JEOR": 2,
-    "SNTY": 3,
-    "WMCE": 1,
-    "SYME": 1,
-    "WNXU": 1,
-    "MOZG": 1,
-    "SASN": 2,
-    "BNLG": 1,
-    "KNDY": 1,
-    "AINK": 2,
-    "MWBS": 1,
-    "TSKH": 1,
-    "KHPS": 1,
-    "DDDT": 1,
-    "PTSH": 1,
-    "YNLU": 1,
-    "DDWR": 1,
-    "HEKY": 1,
-    "KYME": 2,
-    "TYDG": 1,
-    "EOCN": 1,
-    "INGL": 1,
-    "EHMO": 1,
-    "MLPY": 1,
-    "AMVS": 1,
-    "JYCE": 1,
-    "TDCR": 1,
-    "REDR": 1,
-    "MDAD": 1,
-    "NSBS": 1,
-    "LZLI": 1,
-    "BNGE": 1,
-    "JNCY": 1,
-    "IMBK": 1,
-    "KNBS": 1,
-    "LG": 1,
-    "BBLE": 1,
-    "ADDR": 1,
-    "DDGY": 1,
-    "MDKN": 1,
-    "SR": 1
-  },
   "total_connectors": 40,
   "connectors_with_adoption": 11,
   "top_connectors": [
-    {
-      "name": "canvas-design",
-      "user_count": 7,
-      "rank": 1
-    },
-    {
-      "name": "learn",
-      "user_count": 7,
-      "rank": 2
-    },
-    {
-      "name": "doc-coauthoring",
-      "user_count": 4,
-      "rank": 3
-    },
-    {
-      "name": "Plugin Management",
-      "user_count": 3,
-      "rank": 4
-    },
-    {
-      "name": "Data",
-      "user_count": 3,
-      "rank": 5
-    },
-    {
-      "name": "Engineering",
-      "user_count": 3,
-      "rank": 6
-    },
-    {
-      "name": "Legal",
-      "user_count": 3,
-      "rank": 7
-    },
-    {
-      "name": "Human Resources",
-      "user_count": 2,
-      "rank": 8
-    },
-    {
-      "name": "Bio Research",
-      "user_count": 2,
-      "rank": 9
-    },
-    {
-      "name": "Tavily",
-      "user_count": 2,
-      "rank": 10
-    }
+    { "name": "canvas-design", "user_count": 7, "rank": 1 },
+    { "name": "learn", "user_count": 7, "rank": 2 },
+    { "name": "doc-coauthoring", "user_count": 4, "rank": 3 },
+    { "name": "Plugin Management", "user_count": 3, "rank": 4 },
+    { "name": "Data", "user_count": 3, "rank": 5 },
+    { "name": "Engineering", "user_count": 3, "rank": 6 },
+    { "name": "Legal", "user_count": 3, "rank": 7 },
+    { "name": "Human Resources", "user_count": 2, "rank": 8 },
+    { "name": "Bio Research", "user_count": 2, "rank": 9 },
+    { "name": "Tavily", "user_count": 2, "rank": 10 }
   ],
   "least_used_connectors": [
-    {
-      "name": "internal-comms",
-      "user_count": 2,
-      "rank": 11
-    }
+    { "name": "internal-comms", "user_count": 2, "rank": 11 }
   ],
   "zero_adoption_connectors": [
-    "Postiz",
-    "Finance",
-    "Product Management",
-    "PDF Viewer",
-    "Sales",
-    "Operations",
-    "Small Business",
-    "Customer Support",
-    "Brand Voice",
-    "Slack",
-    "Adobe for Creativity",
-    "SearchFit SEO",
-    "Canva",
-    "Apollo.io",
-    "Desktop Commander",
-    "Zoom",
-    "Bright Data",
-    "Common Room",
-    "S&P Global",
-    "Miro",
-    "Zapier",
-    "Box",
-    "ZoomInfo",
-    "Airtable",
-    "Dropbox",
-    "monday.com",
-    "Exa",
-    "Learn with Coursera",
-    "Vanta"
+    "Postiz", "Finance", "Product Management", "PDF Viewer", "Sales", "Operations", "Small Business", "Customer Support", "Brand Voice", "Slack", "Adobe for Creativity", "SearchFit SEO", "Canva", "Apollo.io", "Desktop Commander", "Zoom", "Bright Data", "Common Room", "S&P Global", "Miro", "Zapier", "Box", "ZoomInfo", "Airtable", "Dropbox", "monday.com", "Exa", "Learn with Coursera", "Vanta"
   ],
   "notes": {
     "connector_scope": "total_connectors reflects the 40 plugins recorded in connectors.json; the Discover catalog contains 90+ available plugins, but only 11 had measurable organization adoption in the last 30 days.",
     "least_used_definition": "Among connectors WITH adoption, internal-comms (rank 11, 2 users) is the least used. Connectors with zero users are listed separately in zero_adoption_connectors.",
     "data_integrity": "No values are fabricated; user counts come directly from the Plugins Discover 'Most used' view and project data from the Projects Organization view.",
-    "anonymization": "Creator identities are anonymized using a four-character code: first and last letter of the first name, followed by first and last letter of the last name (e.g., Lori Lont -> LILT)."
+    "privacy": "Per-project detail (titles, descriptions, creators) is not published in this public repo. Only aggregate counts (total public projects and a projects-by-category breakdown) are shared."
   }
 }
