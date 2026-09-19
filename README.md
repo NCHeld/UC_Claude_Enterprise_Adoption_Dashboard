@@ -22,4 +22,4 @@ Plugin "user count" reflects "users in your organization in the last 30 days" as
 
 ## Refresh
 
-See docs/refresh-workflow.md for the repeatable daily refresh process.
+This dashboard is refreshed manually (no automation). To run a refresh from any device, including your phone, open this project in Claude and say "Run the daily dashboard refresh". See docs/daily-refresh-skill.md for the step-by-step skill, and docs/refresh-workflow.md for the detailed data-handling reference.
